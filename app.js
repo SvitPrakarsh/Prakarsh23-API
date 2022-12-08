@@ -17,6 +17,6 @@ app.use('/',require('./routes/index'))
 const port = process.env.PORT || 8080
 
 
-connectDB()
+// connectDB()
 
 app.listen(port, ()=>console.log(`Running on port ${port}`))
