@@ -9,7 +9,8 @@ const PartiSchema = new Schema({
     },
     name:{
         type:String,
-        require:true
+        require:true,
+        maxlength:30
     },
     EID:{
         type:mongoose.isValidObjectId

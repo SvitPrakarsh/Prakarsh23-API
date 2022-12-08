@@ -9,7 +9,8 @@ const EventSchema = new Schema({
     },
     title:{
         type:String,
-        require:true
+        require:true,
+        maxlength:25
     },
     description:{
         type:String,

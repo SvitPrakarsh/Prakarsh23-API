@@ -1,5 +1,6 @@
 const {Router} = require('express')
 const router = Router()
+const eventRoutes = require('./eventRoutes')
 
 
 
@@ -15,7 +16,7 @@ router.post('/',(req,res)=>{
     })
 })
 
-
+router.use('/event', eventRoutes)
 
 
 module.exports = router

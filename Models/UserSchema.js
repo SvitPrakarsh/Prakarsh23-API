@@ -9,7 +9,8 @@ const UserSchema = new Schema({
     },
     name:{
         type:String,
-        require:true
+        require:true,
+        maxlength:30
     },
     email:{
         type:String,
@@ -19,6 +20,7 @@ const UserSchema = new Schema({
     phone:{
         type:Number,
         require:true,
+        maxlength:10
     },
     college:{
         type:String,
