@@ -1,7 +1,7 @@
 const {Router} = require('express')
 const router = Router()
 const eventRoutes = require('./eventRoutes')
-
+const checkoutRoutes = require('./checkoutRoutes')
 
 
 router.get('/', (req,res)=>{
@@ -18,5 +18,6 @@ router.post('/',(req,res)=>{
 
 router.use('/event', eventRoutes)
 
+router.use('/checkout', checkoutRoutes)
 
 module.exports = router
