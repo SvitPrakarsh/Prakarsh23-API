@@ -17,12 +17,16 @@ const EventSchema = new Schema({
         require:true
     },
     image:{
-        type:URL
+        type:String
 
     },
     video:{
-        type:URL
+        type:String
 
+    },
+    maximum_participants: {
+        type: Number,
+        required: true,
     },
     rounds:{
         round1:{
