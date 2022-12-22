@@ -1,22 +1,19 @@
-const {Router} = require('express')
-const router = Router()
-const eventRoutes = require('./eventRoutes')
+const { Router } = require("express");
+const express = require("express");
+const router = Router();
+const eventRoutes = require("./eventRoutes");
+const path = require("path");
+const { addEventController } = require( "../controllers/eventController");
 
+// router.get("/", (req, res) => {
+//   res.send({
+//     message: "working ok",
+//   });
+// });
 
+router.post("/", addEventController);
 
-router.get('/', (req,res)=>{
-    res.send({
-        message:'working ok'
-    })
-})
+router.use(express.json());
+router.use("/event", eventRoutes);
 
-router.post('/',(req,res)=>{
-    res.send({
-        message:'working ok'
-    })
-})
-
-router.use('/event', eventRoutes)
-
-
-module.exports = router
+module.exports = router;
