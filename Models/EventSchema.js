@@ -24,6 +24,10 @@ const EventSchema = new Schema({
         type:mongoose.SchemaTypes.Url
 
     },
+    maximum_participants: {
+        type: Number,
+        required: true,
+    },
     rounds:{
         round1:{
             name:{type:String},
