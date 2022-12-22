@@ -1,10 +1,10 @@
 const  mongoose = require("mongoose");
-
+require('mongoose-type-url');
 const Schema = mongoose.Schema
 
 const EventSchema = new Schema({
     EID:{
-        type:mongoose.isValidObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         
     },
     title:{
@@ -17,20 +17,22 @@ const EventSchema = new Schema({
         require:true
     },
     image:{
-        type:URL
+        type:mongoose.SchemaTypes.Url
 
     },
     video:{
-        type:URL
+        type:mongoose.SchemaTypes.Url
 
     },
     rounds:{
         round1:{
+            name:{type:String},
             description:{
                 type:String
             }
         },
         round2:{
+            name:{type:String},
             discription:{
                 type:String
 
@@ -40,6 +42,6 @@ const EventSchema = new Schema({
     }
     
     
-})
-
-export default mongoose.model("Event",EventSchema)
+},{timestamps:true})
+mongoose.models={}
+module.exports = mongoose.model('Event', EventSchema)

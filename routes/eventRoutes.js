@@ -1,9 +1,10 @@
 const express = require('express')
-const { eventAllCatagoriesController, eventSingleCatagoryController, eventSingleController } = require('../controllers/eventController')
+const { eventAllCatagoriesController, addEventController, eventSingleCatagoryController, eventSingleController } = require('../controllers/eventController')
 const router = express.Router()
 
 router.get('/eventCatgories', eventAllCatagoriesController)
 router.get('/:catagory', eventSingleCatagoryController)
-router.get('/', eventSingleController)
+router.get('/:id', eventSingleController)
+router.post('/add', addEventController)
 
 module.exports = router

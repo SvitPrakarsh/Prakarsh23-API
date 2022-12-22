@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 
 const PartiSchema = new Schema({
     PID:{
-        type:mongoose.isValidObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         
     },
     name:{
