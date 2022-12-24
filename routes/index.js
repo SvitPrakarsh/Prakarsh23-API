@@ -6,7 +6,6 @@ const path = require("path");
 const { addEventController } = require( "../controllers/eventController");
 const checkoutRoutes = require('./checkoutRoutes')
 const cartRoutes = require('./cartRoutes')
-const path = require('path')
 
 // router.get("/", (req, res) => {
 //   res.send({
