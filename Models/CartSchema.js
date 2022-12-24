@@ -6,14 +6,14 @@ const CartSchema = new mongoose.Schema({
         default: this._id
     },
     UID: {
-        type:mongoose.SchemaType.ObjectId,
+        type:mongoose.SchemaTypes.ObjectId,
         ref: "User",
         require:true,
     },
     events: [],
     registrations: [],
     coupon: {
-        type: mongoose.SchemaType.ObjectId,
+        type: mongoose.SchemaTypes.ObjectId,
         ref: "Coupon",
         default: null
     },
