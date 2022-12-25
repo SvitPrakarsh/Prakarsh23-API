@@ -6,8 +6,8 @@ const Coupon = require('../Models/CouponSchema')
 const Event = require('../Models/EventSchema')
 
 const addToCart = (req, res) =>{
-    const user = null
-    const cart = Cart.findOne({CID: ""})
+    const user = req.user
+    const cart = Cart.findById(user.CID)
     const event = Event.findOne({EID: req.body.EID})
     cart.methods.addEvent(event, (err, docs)=>{
         if(err){

@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const {addToCart,
+const { addToCart,
     removeFromCart,
     applyCouponCode,
-    removeCouponCode} = require('../controllers/cartController')
+    removeCouponCode } = require('../controllers/cartController')
 
 router.post('/add-to-cart', addToCart)
 

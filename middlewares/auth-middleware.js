@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken'
-import UserModel from '../models/User.js'
+const jwt = require('jsonwebtoken')
+const UserModel = require('../Models/User')
 
 var checkUserAuth = async (req, res, next) => {
   let token
@@ -11,7 +11,7 @@ var checkUserAuth = async (req, res, next) => {
 
       // Verify Token
       const { userID } = jwt.verify(token, process.env.JWT_SECRET_KEY)
-        const id = await userID;
+      const id = await userID;
       // Get User from Token
       req.user = await UserModel.findById(userID).select('-password')
 
@@ -26,4 +26,4 @@ var checkUserAuth = async (req, res, next) => {
   }
 }
 
-export default checkUserAuth
+module.exports = checkUserAuth
