@@ -5,7 +5,7 @@ const Schema = mongoose.Schema
 const EventSchema = new Schema({
     EID:{
         type:mongoose.Schema.Types.ObjectId,
-        
+        default: this._id,
     },
     title:{
         type:String,
