@@ -10,6 +10,11 @@ const ParticipantSchema = new Schema({
         require:true,
         maxlength:30
     },
+    email:{
+        type: String,
+    },
+    phone: Number,
+    college: String,
     events:[{
         type: mongoose.SchemaType.objectId,
         ref: "Event"

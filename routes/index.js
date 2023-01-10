@@ -6,8 +6,9 @@ const path = require("path");
 const { addEventController } = require("../controllers/eventController");
 const checkoutRoutes = require('./checkoutRoutes')
 const cartRoutes = require('./cartRoutes');
-const { default: checkUserAuth } = require("../middlewares/auth-middleware");
+const checkUserAuth = require("../middlewares/auth-middleware");
 const registrationRoutes = require('./registration')
+const userRoutes = require('./userRoutes')
 
 // router.get("/", (req, res) => {
 //   res.send({
@@ -34,5 +35,7 @@ router.use('/checkout', checkUserAuth, checkoutRoutes)
 router.use('/cart', checkUserAuth, cartRoutes)
 
 router.use('/registration', checkUserAuth, registrationRoutes)
+
+router.use('/auth', userRoutes)
 
 module.exports = router

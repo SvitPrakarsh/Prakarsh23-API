@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const CampusAmbassadorSchema = mongoose.Schema({
+const CampusAmbassadorSchema = new mongoose.Schema({
     name: {
         type: String,
         requried: true
