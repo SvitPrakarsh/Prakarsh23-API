@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const CampusAmbassadorSchema = mongoose.Schema({
+const CampusAmbassadorSchema = new mongoose.Schema({
     name: {
         type: String,
         requried: true
@@ -21,7 +21,6 @@ const CampusAmbassadorSchema = mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Coupon"
     }
-
 })
 
 module.exports = mongoose.model("CampusAmbassador", CampusAmbassadorSchema)

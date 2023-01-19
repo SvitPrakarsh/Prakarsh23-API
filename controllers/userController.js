@@ -1,8 +1,7 @@
-import UserModel from '../models/User.js'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import transporter from '../config/emailConfig.js'
-import { response } from 'express'
+const UserModel = require('../models/UserSchema')
+const bcrypt =  require('bcrypt')
+const jwt =  require('jsonwebtoken')
+const transporter =  require('../config/emailConfig')
 
 class UserController {
   static userRegistration = async (req, res) => {
@@ -23,7 +22,7 @@ class UserController {
               tc: tc
             })
             const data = await doc.save()
-            res.send(data._id)
+            // res.send(data._id)
             const saved_user = await UserModel.findOne({ email: email })
             // Generate JWT Token
             const token = jwt.sign({ userID: saved_user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
@@ -158,4 +157,4 @@ class UserController {
   }
 }
 
-export default UserController
+module.exports = UserController

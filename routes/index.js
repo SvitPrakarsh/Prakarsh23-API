@@ -3,10 +3,12 @@ const express = require("express");
 const router = Router();
 const eventRoutes = require("./eventRoutes");
 const path = require("path");
-const { addEventController } = require( "../controllers/eventController");
+const { addEventController } = require("../controllers/eventController");
 const checkoutRoutes = require('./checkoutRoutes')
-const cartRoutes = require('./cartRoutes')
-const path = require('path')
+const cartRoutes = require('./cartRoutes');
+const checkUserAuth = require("../middlewares/auth-middleware");
+const registrationRoutes = require('./registration')
+const userRoutes = require('./userRoutes')
 
 // router.get("/", (req, res) => {
 //   res.send({
@@ -14,22 +16,26 @@ const path = require('path')
 //   });
 // });
 
-router.post("/", addEventController);
+// router.post("/", addEventController);
 
-router.get('/',(req,res)=>{
+router.get('/', (req, res) => {
     res.send({
-        message:'working ok'
+        message: 'working ok'
     })
 })
 
-router.get('/pay', (req,res)=>{
-    res.sendFile(path.join(__dirname+'/index.html'))
+router.get('/pay', (req, res) => {
+    res.sendFile(path.join(__dirname + '/index.html'))
 })
 
 router.use('/event', eventRoutes)
 
-router.use('/checkout', checkoutRoutes)
+router.use('/checkout', checkUserAuth, checkoutRoutes)
 
-router.use('/cart', cartRoutes)
+router.use('/cart', checkUserAuth, cartRoutes)
+
+router.use('/registration', checkUserAuth, registrationRoutes)
+
+router.use('/auth', userRoutes)
 
 module.exports = router

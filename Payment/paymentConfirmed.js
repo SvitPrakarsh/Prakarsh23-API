@@ -5,19 +5,25 @@ const Registration = require('../Models/RegistrationSchema')
 
 function updateParticipants(registration){
     const event = registration.EID
-    registration.participants.forEach((tempParticipant)=>{
-        const participant = Participant.findOne({phone: tempParticipant.phone})
+    registration.team.forEach((member)=>{
+        const participant = Participant.findOne({phone: member.phone})
         if(participant){
             participant.events.push(event)
         } else {
             const participant = new Participant({
-                name: tempParticipant.name,
-                phone: tempParticipant.phone,                
+                name: member.name,
+                phone: member.phone,                
             })
             participant.events.push(event)
             participant.save()
         }
     })
+
+    // send_recipt, parameters: registration model object (savan)
+
+    // sales table mongodb update, parameters: registration model object (diya)
+    
+    // sales table firebase update, parameters: sales model object (dev)
 }
 
 const paymentConfirmed = (order_id) =>{

@@ -1,24 +1,5 @@
 const mongoose = require('mongoose')
 
-const TempPraticipentSchema = mongoose.Schema({
-    name:{
-        type: String,
-        required: true,
-    },
-    phone:{
-        type: Number,
-        required: true
-    },
-    email:{
-        type: String,
-        required: true
-    },
-    college:{
-        type: String,
-        required: true
-    }
-})
-
 const RegistrationSchema = mongoose.Schema({
     RID: {
         type: mongoose.SchemaTypes.ObjectId,
@@ -29,14 +10,18 @@ const RegistrationSchema = mongoose.Schema({
         ref: "User"
     },
     promoter: {
-        type: mongoose.SchemaType.ObjectId,
-        ref: "Promoter"
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Promoter",
+        default: null,
     },
-    event: {
-        type: mongoose.SchemaType.ObjectId,
+    EID: {
+        type: mongoose.SchemaTypes.ObjectId,
         ref: "Event"
     },
-    participents: [TempPraticipentSchema]
+    team: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Team"
+    },
 })
 
 module.exports = mongoose.model("Registration", RegistrationSchema)

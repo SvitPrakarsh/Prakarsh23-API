@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Event = require('./EventSchema')
 
 const CartSchema = new mongoose.Schema({
     CID: {
@@ -6,14 +7,14 @@ const CartSchema = new mongoose.Schema({
         default: this._id
     },
     UID: {
-        type:mongoose.SchemaType.ObjectId,
+        type:mongoose.SchemaTypes.ObjectId,
         ref: "User",
         require:true,
     },
     events: [],
     registrations: [],
     coupon: {
-        type: mongoose.SchemaType.ObjectId,
+        type: mongoose.SchemaTypes.ObjectId,
         ref: "Coupon",
         default: null
     },
@@ -48,12 +49,15 @@ const CartSchema = new mongoose.Schema({
     }, 
 })
 
-CartSchema.methods.addEvent = async (event, cb) =>{
-    if(this.events.includes(event.EID)){
+CartSchema.methods.addEvent = async (registration, cb) =>{
+    const event = Event.findById(registration.EID)
+
+    if(this.events.includes(registration.EID)){
         return cb({message: "Event already added"}, null)
     } else {
-        this.events.push(event.EID)
-        this.value = this.value + EID.price
+        this.events.push(registration.EID)
+        this.registrations.push(registration._id)
+        this.value = this.value + event.price
     }
     try{
         await this.save()
@@ -65,9 +69,10 @@ CartSchema.methods.addEvent = async (event, cb) =>{
     return cb(null, {message: "Event added successfully"})
 }
 
-CartSchema.methods.removeEvent = async (event, cb)=>{
-    if(this.events.includes(event.EID)){
-        this.events = this.events.filter(item => item!=event.EID)
+CartSchema.methods.removeEvent = async (registration, cb)=>{
+    const event = Event.findById(registration.EID)
+    if(this.events.includes(registration.EID)){
+        this.events = this.events.filter(item => item!=registration.EID)
         this.value = this.value - event.price
         try{
             await this.save()
@@ -108,9 +113,10 @@ CartSchema.methods.removeCoupon = async (cb) =>{
 
 CartSchema.methods.clearCart = async(cb) =>{
     this.events = []
+    this.registrations = []
     this.value = 0
     await this.save()
     return cb(null, {message:"cart reset"})
 }
-
-module.exports = mongoose.model("Cart", CartSchema)
+module.exports.CartSchema = CartSchema
+module.exports.Cart = mongoose.model("Cart", CartSchema)
