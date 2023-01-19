@@ -118,5 +118,5 @@ CartSchema.methods.clearCart = async(cb) =>{
     await this.save()
     return cb(null, {message:"cart reset"})
 }
-
-module.exports = mongoose.model("Cart", CartSchema)
+module.exports.CartSchema = CartSchema
+module.exports.Cart = mongoose.model("Cart", CartSchema)

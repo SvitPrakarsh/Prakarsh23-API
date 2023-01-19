@@ -18,6 +18,12 @@ function updateParticipants(registration){
             participant.save()
         }
     })
+
+    // send_recipt, parameters: registration model object (savan)
+
+    // sales table mongodb update, parameters: registration model object (diya)
+    
+    // sales table firebase update, parameters: sales model object (dev)
 }
 
 const paymentConfirmed = (order_id) =>{

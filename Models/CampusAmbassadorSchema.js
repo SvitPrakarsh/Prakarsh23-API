@@ -21,7 +21,6 @@ const CampusAmbassadorSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Coupon"
     }
-
 })
 
 module.exports = mongoose.model("CampusAmbassador", CampusAmbassadorSchema)
