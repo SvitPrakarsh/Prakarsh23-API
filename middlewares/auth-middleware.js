@@ -1,7 +1,10 @@
 const jwt = require('jsonwebtoken')
 const User = require('../Models/UserSchema')
+<<<<<<< HEAD
 const Promotor = require('../Models/Promoter')
 const Ambassador = require('../Models/CampusAmbassadorSchema')
+=======
+>>>>>>> f7973502b15a8a4ca30a82f77abd5e68c771318a
 
 var checkUserAuth = async (req, res, next) => {
   let token
@@ -28,6 +31,7 @@ var checkUserAuth = async (req, res, next) => {
   }
 }
 
+<<<<<<< HEAD
 module.exports = checkUserAuth
 
 // PromotorAuth
@@ -88,3 +92,6 @@ var checkAmbassadorAuth = async (req, res, next) => {
 }
 
 module.exports = checkAmbassadorAuth
+=======
+module.exports = checkUserAuth
+>>>>>>> f7973502b15a8a4ca30a82f77abd5e68c771318a

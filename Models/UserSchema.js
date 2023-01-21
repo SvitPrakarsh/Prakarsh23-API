@@ -1,22 +1,14 @@
-const  mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
-const Schema = mongoose.Schema
-
-const UserSchema = new Schema({
+const UserSchema = new mongoose.Schema({
     UID:{
         type:mongoose.Schema.Types.ObjectId,
-        
+        default: this._id
     },
-    name:{
-        type:String,
-        require:true,
-        maxlength:30
-    },
-    email:{
-        type:String,
-        require:true,
-        unique:true
-    },
+    name: { type: String, required: true, trim: true },
+    email: { type: String, required: true, trim: true },
+    password: { type: String, required: true, trim: true },
+    tc: { type: Boolean, required: true },
     phone:{
         type:Number,
         require:true,
@@ -32,4 +24,5 @@ const UserSchema = new Schema({
     },
 
 })
-export default mongoose.model("User",UserSchema)
+
+module.exports = mongoose.models.User || mongoose.model("User", UserSchema)
