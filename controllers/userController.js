@@ -2,6 +2,8 @@ const UserModel = require('../models/UserSchema')
 const bcrypt =  require('bcrypt')
 const jwt =  require('jsonwebtoken')
 const transporter =  require('../config/emailConfig')
+const otpGenerator = require('otp-generator')
+const sendOTP = require('../Email/sendOTP')
 
 class UserController {
   static userRegistration = async (req, res) => {
@@ -155,6 +157,20 @@ class UserController {
       res.send({ "status": "failed", "message": "Invalid Token" })
     }
   }
+}
+
+const generateOTP = () =>{
+  const OTP = otpGenerator.generate(
+    6, 
+    {upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false}
+  )
+  return OTP
+}
+
+const SignInWithOTP = (req, res)=>{
+  const OTP = generateOTP()
+  sendOTP(req.body.email, OTP)
+  // rest should be done by nirav
 }
 
 module.exports = UserController
