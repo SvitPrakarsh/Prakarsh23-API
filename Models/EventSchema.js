@@ -8,7 +8,12 @@ const RoundSchema = new mongoose.Schema({
 
 const EventSchema = new mongoose.Schema({
     EID:{
+<<<<<<< HEAD
+        type:mongoose.Schema.Types.ObjectId,
+        default: this._id,
+=======
         type:mongoose.Schema.Types.ObjectId,        
+>>>>>>> f7973502b15a8a4ca30a82f77abd5e68c771318a
     },
     title:{
         type:String,
