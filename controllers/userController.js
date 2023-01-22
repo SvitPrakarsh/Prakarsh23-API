@@ -1,4 +1,5 @@
 const UserModel = require('../models/UserSchema')
+const OtpModel = require('../Models/Otp')
 const bcrypt =  require('bcrypt')
 const jwt =  require('jsonwebtoken')
 const transporter =  require('../config/emailConfig')
@@ -159,18 +160,54 @@ class UserController {
   }
 }
 
-const generateOTP = () =>{
-  const OTP = otpGenerator.generate(
-    6, 
-    {upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false}
-  )
+const generateOTP = async(req,res ,mail) =>{
+ await  setTimeout(()=>{
+    const OTP = otpGenerator.generate(
+      6, 
+      {upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false}
+      
+    )
+    const otp =  OtpModel.save({
+      opt:OTP,
+      mail:mail
+    })
+  },10000000)
   return OTP
 }
-
-const SignInWithOTP = (req, res)=>{
-  const OTP = generateOTP()
+const SignInWithOTP = async(req, res ,OTP)=>{
+  
   sendOTP(req.body.email, OTP)
+  
   // rest should be done by nirav
+  const otp = await OtpModel.findOne({email:email})
+  if(otp)
+  {
+    if(otp.otp===OTP)
+    {
+      res.send("Success")
+      //give function to redirect
+    }
+    else
+    {
+      res.send("OTP verification failed")
+    }
+  }
 }
+// const generateOTP = () =>{
+//   const OTP = otpGenerator.generate(
+//     6, 
+//     {upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false}
+//   )
+//   return OTP
+// }
+
+// const SignInWithOTP = (req, res)=>{
+//   setTimeout(()=>{
+//           const OTP = generateOTP()
+//         },10000000)
+//   sendOTP(req.body.email, OTP)
+//   // rest should be done by nirav
+        
+// }
 
 module.exports = UserController
