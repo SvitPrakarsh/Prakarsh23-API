@@ -15,18 +15,13 @@ router.post('/login', UserController.userLogin)
 router.post('/send-reset-password-email', UserController.sendUserPasswordResetEmail)
 router.post('/reset-password/:id/:token', UserController.userPasswordReset)
 
+router.post('/otpregister', UserController.OtpUserRegistration)
+router.post('/otplogin', UserController.OtpLogin)
+
 // Protected Routes
 router.post('/changepassword', UserController.changeUserPassword)
 router.get('/loggeduser', UserController.loggedUser)
 router.get('/login', UserController.userid)
-// router.get("/isauthorised",UserController.authorised)
-
-// router.get('/test', checkUserAuthid , async(req,resp)=>{
-    
-// })
-// router.get('/test',checkUserAuth, async(req, res)=>{
-//     console.log(req.user._id)
-//     // await res.send(req)
-// })
+router.get('/otplogin', UserController.otpuserid)
 
 module.exports = router
