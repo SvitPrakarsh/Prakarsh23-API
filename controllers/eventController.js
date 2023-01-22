@@ -14,7 +14,7 @@ const eventSingleCatagoryController = async (req, res) => {
 const eventSingleController = async (req, res) => {
 
   const { id } = req.params;
-
+  console.log(id)
   try {
     const event = await Event.findById(id);
 
@@ -30,9 +30,9 @@ const addEventController = async (req, res) => {
   const { EID, title, description, image,video } = req.body;
   console.log(req.body);
   try {
-    const event = await Event.create({ title, EID, description, image, video});
-    res.status(200).json(event);
-    res.setHeader('Content-Type', 'application/json');
+    const event = await Event.create({ title, description, image, video});
+    res.status(200).send(event);
+    // res.setHeader('Content-Type', 'application/json');
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
