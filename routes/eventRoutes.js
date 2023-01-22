@@ -3,7 +3,7 @@ const { eventAllCatagoriesController, addEventController, eventSingleCatagoryCon
 const router = express.Router()
 
 router.get('/eventCatgories', eventAllCatagoriesController)
-router.get('/:catagory', eventSingleCatagoryController)
+router.get('/catagory/:catagory', eventSingleCatagoryController)
 router.get('/:id', eventSingleController)
 router.post('/add', addEventController)
 
