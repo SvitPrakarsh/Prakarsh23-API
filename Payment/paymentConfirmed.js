@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const Participant = require('../Models/ParticipantSchema')
 const CartAndOrder = require('../Models/CartAndOrderSchema')
 const Registration = require('../Models/RegistrationSchema')
+const sendRecipt = require('../Email/sendRecipt')
 
 function updateParticipants(registration){
     const event = registration.EID
@@ -17,9 +18,9 @@ function updateParticipants(registration){
             participant.events.push(event)
             participant.save()
         }
+        sendRecipt(participant, event, registration.RID)
     })
 
-    // send_recipt, parameters: registration model object (savan)
 
     // sales table mongodb update, parameters: registration model object (diya)
     

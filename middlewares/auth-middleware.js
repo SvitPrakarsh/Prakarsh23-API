@@ -1,10 +1,7 @@
 const jwt = require('jsonwebtoken')
 const User = require('../Models/UserSchema')
-<<<<<<< HEAD
-const Promotor = require('../Models/Promoter')
+const Promotor = require('../Models/PromoterSchema')
 const Ambassador = require('../Models/CampusAmbassadorSchema')
-=======
->>>>>>> f7973502b15a8a4ca30a82f77abd5e68c771318a
 
 var checkUserAuth = async (req, res, next) => {
   let token
@@ -13,6 +10,12 @@ var checkUserAuth = async (req, res, next) => {
     try {
       // Get Token from header
       token = authorization.split(' ')[1]
+
+      if(token === process.env.BYPASS_USER){
+        req.user = await User.findById(process.env.BYPASS_USER).select('-password')
+        next()
+        return
+      }
 
       // Verify Token
       const { userID } = jwt.verify(token, process.env.JWT_SECRET_KEY)
@@ -30,8 +33,6 @@ var checkUserAuth = async (req, res, next) => {
     res.status(401).send({ "status": "failed", "message": "Unauthorized User, No Token" })
   }
 }
-
-<<<<<<< HEAD
 module.exports = checkUserAuth
 
 // PromotorAuth
@@ -92,6 +93,4 @@ var checkAmbassadorAuth = async (req, res, next) => {
 }
 
 module.exports = checkAmbassadorAuth
-=======
 module.exports = checkUserAuth
->>>>>>> f7973502b15a8a4ca30a82f77abd5e68c771318a

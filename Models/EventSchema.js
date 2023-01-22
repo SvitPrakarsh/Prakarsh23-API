@@ -8,12 +8,8 @@ const RoundSchema = new mongoose.Schema({
 
 const EventSchema = new mongoose.Schema({
     EID:{
-<<<<<<< HEAD
         type:mongoose.Schema.Types.ObjectId,
         default: this._id,
-=======
-        type:mongoose.Schema.Types.ObjectId,        
->>>>>>> f7973502b15a8a4ca30a82f77abd5e68c771318a
     },
     title:{
         type:String,
@@ -34,6 +30,23 @@ const EventSchema = new mongoose.Schema({
     maximum_participants: {
         type: Number,
         required: true,
+    },
+    maximum_team:{
+        type: Number,
+        required: true,
+    },
+    department:[],
+    interest:[],
+    year:[],
+    // tech, nontech
+    group:{
+        type:String,
+        required: true,
+    },
+    // circitrix
+    catagory:{
+        type: String, 
+        required: true
     },
     is_solo:{
         type: Boolean,

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const PromotorSchema = new mongoose.Schema({
+const PromoterSchema = new mongoose.Schema({
     PRID:{
         type:mongoose.Schema.Types.ObjectId,
         default: this._id
@@ -27,4 +27,4 @@ const PromotorSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model("Promotor", PromotorSchema)
+module.exports = mongoose.model("Promoter", PromoterSchema)
