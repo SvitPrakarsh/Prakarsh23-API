@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, trim: true },
     password: { type: String, required: true, trim: true },
     tc: { type: Boolean, required: true },
+    is_promoter: {type: Boolean},
     phone:{
         type:Number,
         require:true,

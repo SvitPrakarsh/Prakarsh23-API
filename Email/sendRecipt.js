@@ -1,5 +1,5 @@
 const sendRecipt = (event, participant, RID) => {
-    const email = participant.event
+    const email = participant.email
     return
 }
 
