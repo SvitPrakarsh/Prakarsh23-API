@@ -1,12 +1,15 @@
 const UserModel = require('../models/UserSchema')
-const bcrypt =  require('bcrypt')
-const jwt =  require('jsonwebtoken')
-const transporter =  require('../config/emailConfig')
+const FotpUserModel = require('../models/authedotpuser')
+const TOtpModel = require('../Models/Otp')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const transporter = require('../config/emailConfig')
 const otpGenerator = require('otp-generator')
 const sendOTP = require('../Email/sendOTP')
 
 class UserController {
   static userRegistration = async (req, res) => {
+
     const { name, email, password, password_confirmation, tc } = req.body
     const user = await UserModel.findOne({ email: email })
     if (user) {
@@ -106,7 +109,7 @@ class UserController {
         let info = await transporter.sendMail({
           from: process.env.EMAIL_FROM,
           to: user.email,
-          subject: "GeekShop - Password Reset Link",
+          subject: "Password Reset Link",
           html: `<a href=${link}>Click Here</a> to Reset Your Password`
         }
         )
@@ -157,20 +160,125 @@ class UserController {
       res.send({ "status": "failed", "message": "Invalid Token" })
     }
   }
+
+
+  static OtpUserRegistration = async (req, res) => {
+
+
+    const { name, email } = req.body
+    const OtpUser = await FotpUserModel.findOne({ email: email })
+    if (Otpuser) {
+      res.send({ "status": "failed", "message": "Email already exists" })
+    } else {
+      generateOTP(email);
+      const { OTP } = req.body;
+      if (name && email && OTP) {
+        if (OTP === OtpUser.otp) {
+          try {
+            const POtpUser = await FotpUserModel.findOne({ email: email })
+
+            const doc = new FotpUserModel({
+              name: name,
+              email: email,
+              otp: OTP
+            })
+            const data = await doc.save()
+            // res.send(data._id)
+            const saved_user = await FotpUserModel.findOne({ email: email })
+            // Generate JWT Token
+            const token = jwt.sign({ userID: saved_user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
+            res.status(201).send({ "status": "success", "message": "Registration Success", "token": token })
+          } catch (error) {
+            console.log(error)
+            res.send({ "status": "failed", "message": "Unable to Register" })
+          }
+        } else {
+          res.send({ "status": "failed" })
+        }
+      } else {
+        res.send({ "status": "failed", "message": "All fields are required" })
+      }
+    }
+  }
+
+  static OtpLogin = async (req, res) => {
+    try {
+      generateOTP(email);
+      const { email, OTP } = req.body
+      if (email && OTP) {
+        const otp = await TOtpModel.findOne({ email: email })
+        if (otp != null) {
+          // const isMatch = await (OTP===otp.OTP)
+          if ((otp.email === email) && (OTP === otp.OTP)) {
+            // Generate JWT Token
+            const token = jwt.sign({ otpID: otp._id }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
+            res.send({ "status": "success", "message": "Login Success", "token": token })
+
+          } else {
+            res.send({ "status": "failed", "message": "Email or OTP is not Valid" })
+          }
+        } else {
+          res.send({ "status": "failed", "message": "You are not a Registered User" })
+        }
+      } else {
+        res.send({ "status": "failed", "message": "All Fields are Required" })
+      }
+    } catch (error) {
+      console.log(error)
+      res.send({ "status": "failed", "message": "Unable to Login" })
+    }
+  }
+
+  static otpuserid = async (req, res) => {
+    // try {
+    const { email } = req.body
+    if (email ) {
+      const user = await FotpUserModel.findOne({ email: email })
+      if (user != null) {
+        if ((user.email === email)) {
+          let final = await JSON.stringify(user._id)
+          res.send(final)
+        }
+      }
+    }
+  }
 }
 
-const generateOTP = () =>{
-  const OTP = otpGenerator.generate(
-    6, 
-    {upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false}
-  )
+
+const generateOTP = async (req, res, mail) => {
+  await setTimeout(() => {
+    const OTP = otpGenerator.generate(
+      6,
+      { upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false }
+
+    )
+
+    const otp = TOtpModel.save({
+      opt: OTP,
+      mail: mail
+    })
+  }, 10000000)
   return OTP
 }
 
-const SignInWithOTP = (req, res)=>{
-  const OTP = generateOTP()
-  sendOTP(req.body.email, OTP)
-  // rest should be done by nirav
-}
+// const SignInWithOTP = async(req, res ,OTP)=>{
+
+//   sendOTP(req.body.email, OTP)
+
+//   // rest should be done by nirav
+//   const otp = await TOtpModel.findOne({email:email})
+//   if(otp)
+//   {
+//     if(otp.otp===OTP)
+//     {
+//       res.send("Success")
+//       //give function to redirect
+//     }
+//     else
+//     {
+//       res.send("OTP verification failed")
+//     }
+//   }
+// }
 
 module.exports = UserController
