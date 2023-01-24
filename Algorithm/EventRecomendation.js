@@ -22,7 +22,7 @@ const EventRecomendation = (data) =>{
     const candidateEvents = new set(
         rawFilteredEvents.map(({EID})=>EID))
         .map(EID=>rawFilteredEvents
-            .find(item => item.EID ===EID)))
+            .find(item => item.EID ===EID))
     
     valuedEvent = candidateEvents.map(event => {
         for(let i=0; i<5; i++){

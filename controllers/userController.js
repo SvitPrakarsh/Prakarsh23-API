@@ -1,4 +1,4 @@
-const UserModel = require('../models/UserSchema')
+const User = require('../models/UserSchema')
 const FotpUserModel = require('../models/authedotpuser')
 const TOtpModel = require('../Models/Otp')
 const bcrypt = require('bcrypt')
@@ -11,7 +11,7 @@ class UserController {
   static userRegistration = async (req, res) => {
 
     const { name, email, password, password_confirmation, tc } = req.body
-    const user = await UserModel.findOne({ email: email })
+    const user = await User.findOne({ email: email })
     if (user) {
       res.send({ "status": "failed", "message": "Email already exists" })
     } else {
@@ -20,7 +20,7 @@ class UserController {
           try {
             const salt = await bcrypt.genSalt(10)
             const hashPassword = await bcrypt.hash(password, salt)
-            const doc = new UserModel({
+            const doc = new User({
               name: name,
               email: email,
               password: hashPassword,
@@ -28,7 +28,7 @@ class UserController {
             })
             const data = await doc.save()
             // res.send(data._id)
-            const saved_user = await UserModel.findOne({ email: email })
+            const saved_user = await User.findOne({ email: email })
             // Generate JWT Token
             const token = jwt.sign({ userID: saved_user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
             res.status(201).send({ "status": "success", "message": "Registration Success", "token": token })
@@ -49,7 +49,7 @@ class UserController {
     try {
       const { email, password } = req.body
       if (email && password) {
-        const user = await UserModel.findOne({ email: email })
+        const user = await User.findOne({ email: email })
         if (user != null) {
           const isMatch = await bcrypt.compare(password, user.password)
           if ((user.email === email) && isMatch) {
@@ -58,7 +58,7 @@ class UserController {
             // Generate JWT Token
             const token = jwt.sign({ userID: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
             res.send({ "status": "success", "message": "Login Success", "token": token })
-            // const id = await UserModel.findOne({ email: email })
+            // const id = await User.findOne({ email: email })
             //   let id = JSON.stringify(user._id)
 
           } else {
@@ -84,7 +84,7 @@ class UserController {
       } else {
         const salt = await bcrypt.genSalt(10)
         const newHashPassword = await bcrypt.hash(password, salt)
-        await UserModel.findByIdAndUpdate(req.user._id, { $set: { password: newHashPassword } })
+        await User.findByIdAndUpdate(req.user._id, { $set: { password: newHashPassword } })
         res.send({ "status": "success", "message": "Password changed succesfully" })
       }
     } else {
@@ -99,7 +99,7 @@ class UserController {
   static sendUserPasswordResetEmail = async (req, res) => {
     const { email } = req.body
     if (email) {
-      const user = await UserModel.findOne({ email: email })
+      const user = await User.findOne({ email: email })
       if (user) {
         const secret = user._id + process.env.JWT_SECRET_KEY
         const token = jwt.sign({ userID: user._id }, secret, { expiresIn: '15m' })
@@ -125,7 +125,7 @@ class UserController {
     // try {
     const { email, password } = req.body
     if (email && password) {
-      const user = await UserModel.findOne({ email: email })
+      const user = await User.findOne({ email: email })
       if (user != null) {
         const isMatch = await bcrypt.compare(password, user.password)
         if ((user.email === email) && isMatch) {
@@ -139,7 +139,7 @@ class UserController {
   static userPasswordReset = async (req, res) => {
     const { password, password_confirmation } = req.body
     const { id, token } = req.params
-    const user = await UserModel.findById(id)
+    const user = await User.findById(id)
     const new_secret = user._id + process.env.JWT_SECRET_KEY
     try {
       jwt.verify(token, new_secret)
@@ -149,7 +149,7 @@ class UserController {
         } else {
           const salt = await bcrypt.genSalt(10)
           const newHashPassword = await bcrypt.hash(password, salt)
-          await UserModel.findByIdAndUpdate(user._id, { $set: { password: newHashPassword } })
+          await User.findByIdAndUpdate(user._id, { $set: { password: newHashPassword } })
           res.send({ "status": "success", "message": "Password Reset Successfully" })
         }
       } else {
@@ -229,6 +229,46 @@ class UserController {
     }
   }
 
+  
+
+  static sendOTP = async (req, res)=>{
+    const email = req.body.email
+    const otp = generateOTP(email)
+    resetOTP(email)
+    res.status().json({message: "otp sent successfully"})
+  }
+
+  static otpVerification = async (req, res) =>{
+    const email = req.body.email
+    const otp = req.body.otp
+    if(otp && email){
+      const otpObj = await TOtpModel.findOne({ email: email })
+      if(otpObj.OTP === otp){
+        try{
+           const user = await User.findOne({email:email})
+           const token = jwt.sign({ userID: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
+           res.status(200).json({message: "signIn success", token:token})
+        } catch(e) {
+          res.status(200).json({message:"OTP verification successfull"})
+        }
+      } else {
+        res.status(401).json({message: "Otp expired"})
+      }
+    }
+
+  }
+
+  static updateNewUser = async (req, res) =>{
+    try{
+      const user = User.create(req.body)
+      const token = jwt.sign({ userID: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
+      res.send(200).json({message: "signIn success", token:token})
+    } catch(e){
+      res.status(401).({message: "User not create"})
+    }
+  }
+
+
   static otpuserid = async (req, res) => {
     // try {
     const { email } = req.body
@@ -244,8 +284,7 @@ class UserController {
   }
 }
 
-
-const generateOTP = async (req, res, mail) => {
+const resetOTP = async (mail)=> {
   await setTimeout(() => {
     const OTP = otpGenerator.generate(
       6,
@@ -258,6 +297,19 @@ const generateOTP = async (req, res, mail) => {
       mail: mail
     })
   }, 10000000)
+}
+
+const generateOTP = async (mail) => {
+  const OTP = otpGenerator.generate(
+    6,
+    { upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false }
+
+  )
+
+  const otp = TOtpModel.save({
+    opt: OTP,
+    mail: mail
+  })
   return OTP
 }
 
