@@ -264,7 +264,7 @@ class UserController {
       const token = jwt.sign({ userID: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '5d' })
       res.send(200).json({message: "signIn success", token:token})
     } catch(e){
-      res.status(401).({message: "User not create"})
+      res.status(401).json({message: "User not create"})
     }
   }
 
