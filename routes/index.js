@@ -28,7 +28,7 @@ router.get('/pay', (req, res) => {
     res.sendFile(path.join(__dirname + '/index.html'))
 })
 
-router.use('/event', eventRoutes)
+router.use('/events', eventRoutes)
 
 router.use('/checkout', checkUserAuth, checkoutRoutes)
 
@@ -39,3 +39,4 @@ router.use('/registration', checkUserAuth, registrationRoutes)
 router.use('/auth', userRoutes)
 
 module.exports = router
+

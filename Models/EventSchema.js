@@ -29,11 +29,9 @@ const EventSchema = new mongoose.Schema({
     },
     maximum_participants: {
         type: Number,
-        required: true,
     },
     maximum_team:{
         type: Number,
-        required: true,
     },
     department:[],
     interest:[],
@@ -41,12 +39,10 @@ const EventSchema = new mongoose.Schema({
     // tech, nontech
     group:{
         type:String,
-        required: true,
     },
     // circitrix
     catagory:{
         type: String, 
-        required: true
     },
     is_solo:{
         type: Boolean,

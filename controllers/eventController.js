@@ -3,6 +3,11 @@ const express = require("express");
 const Event = require("../Models/EventSchema");
 const { EID } = require("../Models/EventSchema");
 
+// development function only
+const allEvents = async (req, res) =>{
+  res.json(await Event.find())
+}
+
 const eventAllCatagoriesController = (req, res) => {
   res.send("hello");
 };
@@ -27,10 +32,38 @@ const eventSingleController = async (req, res) => {
 
 
 const addEventController = async (req, res) => {
-  const { EID, title, description, image,video } = req.body;
+  const {
+    title,
+    description,
+    image,
+    video,
+    maximum_participants,
+    maximum_team,
+    department,
+    interest,
+    year,
+    group,
+    catagory,
+    is_solo } = req.body;
   console.log(req.body);
+  
+  // department = department.split(', ')
+  // interest = interest.split(', ')
+  // year = year.split(', ')
+
   try {
-    const event = await Event.create({ title, description, image, video});
+    const event = await Event.create({ title,
+      description,
+      image,
+      video,
+      maximum_participants,
+      maximum_team,
+      department,
+      interest,
+      year,
+      group,
+      catagory,
+      is_solo});
     res.status(200).send(event);
     // res.setHeader('Content-Type', 'application/json');
   } catch (error) {
@@ -43,4 +76,5 @@ module.exports = {
   eventSingleCatagoryController,
   eventSingleController,
   addEventController,
+  allEvents,
 };
